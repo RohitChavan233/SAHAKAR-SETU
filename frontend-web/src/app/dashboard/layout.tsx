@@ -15,7 +15,7 @@ export default function DashboardLayout({
     const userData = localStorage.getItem('user');
     
     if (!token || !userData) {
-      router.push('/login');
+      router.push('/');
       return;
     }
     
@@ -25,7 +25,7 @@ export default function DashboardLayout({
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    router.push('/login');
+    router.push('/');
   };
 
   if (!user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
