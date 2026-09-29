@@ -31,11 +31,11 @@ export default function DashboardLayout({
   if (!user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-slate-50/50 flex font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-teal-900 flex font-sans text-slate-100">
       {/* Sidebar */}
-      <aside className="w-72 bg-indigo-950 text-indigo-50 hidden md:flex flex-col shadow-2xl relative z-20">
-        <div className="p-6 border-b border-indigo-900/50 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-xl font-bold shadow-lg shadow-orange-500/20 text-white">
+      <aside className="w-72 bg-black/20 backdrop-blur-xl border-r border-white/10 hidden md:flex flex-col relative z-20">
+        <div className="p-6 border-b border-white/10 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl font-bold shadow-lg shadow-black/20 text-white backdrop-blur-sm">
             <i className="fa-solid fa-wheat-awn"></i>
           </div>
           <div>
@@ -45,36 +45,36 @@ export default function DashboardLayout({
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <a href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600/40 text-white font-semibold shadow-sm border border-indigo-500/30">
-            <i className="fa-solid fa-border-all w-5"></i> Dashboard
+          <a href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-semibold shadow-inner border border-white/10 backdrop-blur-sm">
+            <i className="fa-solid fa-border-all w-5 text-indigo-300"></i> Dashboard
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-indigo-900/50 hover:text-white transition-all font-medium">
-            <i className="fa-solid fa-book-open w-5"></i> Courses & Modules
+          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+            <i className="fa-solid fa-book-open w-5 text-emerald-300/70"></i> Courses & Modules
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-indigo-900/50 hover:text-white transition-all font-medium">
-            <i className="fa-solid fa-users-viewfinder w-5"></i> Training Batches
+          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+            <i className="fa-solid fa-users-viewfinder w-5 text-amber-300/70"></i> Training Batches
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-indigo-900/50 hover:text-white transition-all font-medium">
-            <i className="fa-solid fa-briefcase w-5"></i> Job Portal
+          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+            <i className="fa-solid fa-briefcase w-5 text-sky-300/70"></i> Job Portal
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-indigo-900/50 hover:text-white transition-all font-medium">
-            <i className="fa-solid fa-chart-line w-5"></i> My Progress
+          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+            <i className="fa-solid fa-chart-line w-5 text-purple-300/70"></i> My Progress
           </a>
         </nav>
         
-        <div className="p-4 border-t border-indigo-900/50">
-          <div className="bg-indigo-900/30 rounded-xl p-4 flex items-center gap-3 mb-4 border border-indigo-800/30">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold shadow-md">
+        <div className="p-4 border-t border-white/10">
+          <div className="bg-black/20 rounded-xl p-4 flex items-center gap-3 mb-4 border border-white/5">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold shadow-md">
               {user.fullName.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white truncate">{user.fullName}</p>
-              <p className="text-xs text-emerald-400 font-medium truncate">{user.role}</p>
+              <p className="text-xs text-emerald-300 font-medium truncate">{user.role}</p>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-900/50 hover:bg-red-500/20 hover:text-red-400 rounded-lg text-indigo-300 transition-all text-sm font-semibold border border-indigo-800/30 hover:border-red-500/30"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-black/20 hover:bg-red-500/20 hover:text-red-400 rounded-lg text-indigo-200 transition-all text-sm font-semibold border border-white/5 hover:border-red-500/30"
           >
             <i className="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
           </button>
@@ -84,22 +84,22 @@ export default function DashboardLayout({
       {/* Main Content */}
       <main className="flex-1 flex flex-col relative overflow-hidden">
         {/* Top Header */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-10">
+        <header className="h-20 bg-black/10 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-8 sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-bold text-slate-800 hidden md:block">Overview</h2>
+            <h2 className="text-xl font-bold text-white hidden md:block tracking-wide">Overview</h2>
           </div>
           
           <div className="flex items-center gap-5">
-            <button className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-colors relative">
+            <button className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-indigo-200 hover:bg-white/10 hover:text-white transition-colors relative shadow-inner">
               <i className="fa-regular fa-bell"></i>
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-slate-100"></span>
+              <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-slate-900 shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
             </button>
-            <div className="h-8 w-px bg-slate-200"></div>
-            <div className="flex items-center gap-2 cursor-pointer">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            <div className="h-8 w-px bg-white/10"></div>
+            <div className="flex items-center gap-2 cursor-pointer group">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-md group-hover:scale-105 transition-transform">
                 {user.fullName.charAt(0)}
               </div>
-              <i className="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+              <i className="fa-solid fa-chevron-down text-xs text-indigo-300 group-hover:text-white transition-colors"></i>
             </div>
           </div>
         </header>
