@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function DashboardLayout({
   children,
@@ -28,6 +28,15 @@ export default function DashboardLayout({
     router.push('/');
   };
 
+  const pathname = usePathname();
+
+  const getLinkClass = (path: string) => {
+    const isActive = pathname === path;
+    return isActive 
+      ? "flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-semibold shadow-inner border border-white/10 backdrop-blur-sm"
+      : "flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium";
+  };
+
   if (!user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
@@ -45,19 +54,19 @@ export default function DashboardLayout({
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <a href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-semibold shadow-inner border border-white/10 backdrop-blur-sm">
+          <a href="/dashboard" className={getLinkClass("/dashboard")}>
             <i className="fa-solid fa-border-all w-5 text-indigo-300"></i> Dashboard
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+          <a href="/dashboard/courses" className={getLinkClass("/dashboard/courses")}>
             <i className="fa-solid fa-book-open w-5 text-emerald-300/70"></i> Courses & Modules
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+          <a href="/dashboard/batches" className={getLinkClass("/dashboard/batches")}>
             <i className="fa-solid fa-users-viewfinder w-5 text-amber-300/70"></i> Training Batches
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+          <a href="/dashboard/jobs" className={getLinkClass("/dashboard/jobs")}>
             <i className="fa-solid fa-briefcase w-5 text-sky-300/70"></i> Job Portal
           </a>
-          <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-indigo-200 hover:bg-white/5 hover:text-white transition-all font-medium">
+          <a href="/dashboard/progress" className={getLinkClass("/dashboard/progress")}>
             <i className="fa-solid fa-chart-line w-5 text-purple-300/70"></i> My Progress
           </a>
         </nav>
