@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  learnerId       String?   @unique // NCCT-2026-MH-00492
+  email           String?   @unique
+  mobileNumber    String    @unique
+  passwordHash    String?   // If applicable, else OTP based
+  aadhaarHash     String?   @unique
+  fullName        String
+  state           String?
+  district        String?
+  stakeholderType String?
+  preferredLang   String?   @default("en")
+  role            String    @default("TRAINEE") // SUPER_ADMIN, INSTITUTE_ADMIN, TRAINER, TRAINEE, EMPLOYER
+  
+  instituteId     String?
+  institute       Institute? @relation(fields: [instituteId], references: [id])
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  enrollments     Enrollment[]
+  attendanceLogs  AttendanceLog[]
+  certificates    Certificate[]
+  jobApplications JobApplication[]
+  learningProgress LearningProgress[]
+  quizAttempts    QuizAttempt[]
+  notifications   Notification[]
+  dprs            DPR[]
+  trainerBatches  TrainingBatch[] @relation("TrainerBatches")
+}
+
+model Institute {
+  id          String        @id @default(uuid())
+  name        String
+  type        String        // NCCT_HQ, VAMNICOM, RICM, ICM, OTHER
+  state       String?
+  district    String?
+  parentId    String?
+  parent      Institute?    @relation("InstituteHierarchy", fields: [parentId], references: [id])
+  children    Institute[]   @relation("InstituteHierarchy")
+  users       User[]
+  batches     TrainingBatch[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  category    String
+  thumbnail   String?
+  isOfflineCompatible Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  batches     TrainingBatch[]
+  quizzes     Quiz[]
+  progress    LearningProgress[]
+}
+
+model TrainingBatch {
+  id              String       @id @default(uuid())
+  courseId        String
+  course          Course       @relation(fields: [courseId], references: [id])
+  instituteId     String
+  institute       Institute    @relation(fields: [instituteId], references: [id])
+  trainerId       String?
+  trainer         User?        @relation("TrainerBatches", fields: [trainerId], references: [id])
+  
+  name            String
+  startDate       DateTime
+  endDate         DateTime
+  trainingMode    String       // PHYSICAL, ONLINE, HYBRID
+  seatCapacity    Int
+  status          String       @default("UPCOMING") // UPCOMING, ONGOING, COMPLETED, CANCELLED
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  enrollments     Enrollment[]
+  attendanceLogs  AttendanceLog[]
+}
+
+model Enrollment {
+  id          String        @id @default(uuid())
+  traineeId   String
+  trainee     User          @relation(fields: [traineeId], references: [id])
+  batchId     String
+  batch       TrainingBatch @relation(fields: [batchId], references: [id])
+  status      String        @default("ENROLLED") // ENROLLED, COMPLETED, DROPPED
+  riskLevel   String        @default("LOW") // LOW, MEDIUM, HIGH
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([traineeId, batchId])
+}
+
+model AttendanceLog {
+  id          String        @id @default(uuid())
+  traineeId   String
+  trainee     User          @relation(fields: [traineeId], references: [id])
+  batchId     String
+  batch       TrainingBatch @relation(fields: [batchId], references: [id])
+  date        DateTime      @default(now())
+  method      String        // HARDWARE, QR, ONLINE
+  
+  createdAt   DateTime      @default(now())
+
+  @@unique([traineeId, batchId, date])
+}
+
+model LearningProgress {
+  id          String   @id @default(uuid())
+  traineeId   String
+  trainee     User     @relation(fields: [traineeId], references: [id])
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  completionPercentage Float @default(0.0)
+  timeSpentMinutes     Int   @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([traineeId, courseId])
+}
+
+model Quiz {
+  id          String   @id @default(uuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  title       String
+  type        String   // PRE_TEST, POST_TEST, MODULE
+  questions   String   // JSON string of questions (SQLite doesn't support Json type directly in Prisma in older versions, but let's stick to String)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attempts    QuizAttempt[]
+}
+
+model QuizAttempt {
+  id          String   @id @default(uuid())
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  traineeId   String
+  trainee     User     @relation(fields: [traineeId], references: [id])
+  score       Float
+  totalMarks  Float
+  answers     String   // JSON string of trainee's answers
+  
+  createdAt   DateTime @default(now())
+}
+
+model Certificate {
+  id          String   @id @default(uuid())
+  traineeId   String
+  trainee     User     @relation(fields: [traineeId], references: [id])
+  courseName  String
+  instituteName String
+  issueDate   DateTime @default(now())
+  hash        String   @unique
+  pdfUrl      String?
+  
+  createdAt   DateTime @default(now())
+}
+
+model JobPosting {
+  id              String   @id @default(uuid())
+  employerId      String
+  title           String
+  organization    String
+  description     String
+  state           String
+  district        String
+  salary          String?
+  vacancies       Int
+  requiredSkills  String // Comma separated string for simplicity in SQLite
+  isActive        Boolean  @default(true)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  applications    JobApplication[]
+}
+
+model JobApplication {
+  id          String            @id @default(uuid())
+  jobId       String
+  job         JobPosting        @relation(fields: [jobId], references: [id])
+  traineeId   String
+  trainee     User              @relation(fields: [traineeId], references: [id])
+  status      String            @default("APPLIED") // APPLIED, SHORTLISTED, INTERVIEW, SELECTED, REJECTED
+  matchScore  Float?
+  
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([jobId, traineeId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  message     String
+  type        String   // INFO, WARNING, SUCCESS
+  isRead      Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+}
+
+model DPR {
+  id              String   @id @default(uuid())
+  traineeId       String
+  trainee         User     @relation(fields: [traineeId], references: [id])
+  businessType    String
+  location        String
+  capitalNeeded   Float
+  membersCount    Int
+  generatedPdfUrl String?
+  content         String   // JSON string of generated content
+  
+  createdAt       DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  userId      String?
+  details     String?  // JSON string
+  ipAddress   String?
+  
+  createdAt   DateTime @default(now())
+}
