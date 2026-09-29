@@ -1,12 +1,38 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    router.push("/dashboard");
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    
+    try {
+      const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password }),
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+      
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -84,18 +110,36 @@ export default function Login() {
 
           <div className="space-y-3 mb-4">
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1">Unique Cooperative Learner ID / Mobile</label>
-              <input type="text" defaultValue="NCCT-2026-MH-00492 (Kiran Patil)" className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-slate-50 font-medium outline-none focus:border-indigo-500" readOnly />
+              <label className="text-xs font-semibold text-slate-600 block mb-1">Email or Mobile Number</label>
+              <input 
+                type="text" 
+                value={identifier}
+                onChange={e => setIdentifier(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white font-medium outline-none focus:border-indigo-500" 
+                placeholder="Enter email or mobile"
+              />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1">Select Institute / Training Center</label>
-              <input type="text" defaultValue="VAMNICOM Pune / ICM Nashik Outreach Center" className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-slate-50 font-medium outline-none focus:border-indigo-500" readOnly />
+              <label className="text-xs font-semibold text-slate-600 block mb-1">Password</label>
+              <input 
+                type="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white font-medium outline-none focus:border-indigo-500" 
+                placeholder="Enter your password"
+              />
             </div>
+            
+            {error && <p className="text-red-500 text-xs font-semibold">{error}</p>}
           </div>
 
           <button onClick={handleLogin} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg shadow-md transition mb-3 text-sm">
-            Sign In with Aadhaar OTP / DigiLocker <i className="fa-solid fa-arrow-right ml-1"></i>
+            Sign In to Dashboard <i className="fa-solid fa-arrow-right ml-1"></i>
           </button>
+          
+          <div className="text-center mb-2">
+            <a href="/register" className="text-indigo-600 hover:underline text-xs font-bold">New User? Create an Account</a>
+          </div>
 
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-slate-200"></div>
