@@ -79,85 +79,87 @@ export default function Login() {
         </div>
 
         {/* Right Login Panel */}
-        <div className="p-8 flex flex-col justify-center">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+        <div className="p-10 flex flex-col justify-center bg-slate-50/50">
+          <div className="flex justify-between items-center mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-100 px-3 py-1.5 rounded-full">
               Welcome to NCCT Portal
             </span>
-            <select className="text-xs border border-slate-300 rounded-lg px-2 py-1 bg-slate-50 font-medium outline-none">
+            <select className="text-xs border border-slate-300 rounded-lg px-3 py-1.5 bg-white font-medium outline-none shadow-sm hover:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+              <option defaultValue="en">🌐 English</option>
               <option>🌐 हिंदी / Hindi</option>
               <option>🌐 मराठी / Marathi</option>
-              <option defaultValue="en">🌐 English</option>
               <option>🌐 ગુજરાતી / Gujarati</option>
             </select>
           </div>
 
-          <h3 className="text-2xl font-extrabold text-slate-800 mb-1">Sign In to Sahakar-Setu</h3>
-          <p className="text-xs text-slate-500 mb-5">Select your stakeholder role or tap your NCCT RFID Smart Card</p>
+          <h3 className="text-3xl font-extrabold text-slate-800 mb-2">Sign In to Sahakar-Setu</h3>
+          <p className="text-sm text-slate-500 mb-8">Select your stakeholder role or tap your NCCT RFID Smart Card</p>
 
           {/* Role Selector Pills */}
-          <div className="grid grid-cols-3 gap-2 mb-4 text-xs font-semibold text-center">
-            <div className="p-2 rounded-lg bg-indigo-600 text-white shadow cursor-pointer">
-              <i className="fa-solid fa-user-graduate block mb-1"></i> Rural Youth / SHG
+          <div className="grid grid-cols-3 gap-3 mb-8 text-xs font-bold text-center">
+            <div className="p-3 rounded-xl bg-indigo-600 text-white shadow-md cursor-pointer hover:bg-indigo-700 transition-all transform hover:-translate-y-0.5">
+              <i className="fa-solid fa-user-graduate block mb-1.5 text-lg"></i> Rural Youth / SHG
             </div>
-            <div className="p-2 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 cursor-pointer hover:bg-slate-200 transition">
-              <i className="fa-solid fa-building-columns block mb-1"></i> VAMNICOM / ICM
+            <div className="p-3 rounded-xl bg-white text-slate-600 border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-300 hover:text-indigo-600 transition-all transform hover:-translate-y-0.5">
+              <i className="fa-solid fa-building-columns block mb-1.5 text-lg"></i> VAMNICOM / ICM
             </div>
-            <div className="p-2 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 cursor-pointer hover:bg-slate-200 transition">
-              <i className="fa-solid fa-handshake block mb-1"></i> Coop Employer
+            <div className="p-3 rounded-xl bg-white text-slate-600 border border-slate-200 shadow-sm cursor-pointer hover:border-indigo-300 hover:text-indigo-600 transition-all transform hover:-translate-y-0.5">
+              <i className="fa-solid fa-handshake block mb-1.5 text-lg"></i> Coop Employer
             </div>
           </div>
 
-          <div className="space-y-3 mb-4">
+          <form onSubmit={handleLogin} className="space-y-5 mb-6">
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1">Email or Mobile Number</label>
+              <label className="text-sm font-semibold text-slate-700 block mb-1.5">Email or Mobile Number</label>
               <input 
                 type="text" 
                 value={identifier}
                 onChange={e => setIdentifier(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white font-medium outline-none focus:border-indigo-500" 
+                className="w-full px-4 py-3 text-sm border border-slate-300 rounded-xl bg-white font-medium outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm" 
                 placeholder="Enter email or mobile"
+                required
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-600 block mb-1">Password</label>
+              <label className="text-sm font-semibold text-slate-700 block mb-1.5">Password</label>
               <input 
                 type="password" 
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white font-medium outline-none focus:border-indigo-500" 
+                className="w-full px-4 py-3 text-sm border border-slate-300 rounded-xl bg-white font-medium outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-sm" 
                 placeholder="Enter your password"
+                required
               />
             </div>
             
-            {error && <p className="text-red-500 text-xs font-semibold">{error}</p>}
-          </div>
+            {error && <p className="text-red-500 text-sm font-semibold bg-red-50 p-3 rounded-lg">{error}</p>}
 
-          <button onClick={handleLogin} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg shadow-md transition mb-3 text-sm">
-            Sign In to Dashboard <i className="fa-solid fa-arrow-right ml-1"></i>
-          </button>
+            <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition-all transform hover:-translate-y-0.5 text-sm">
+              Sign In to Dashboard <i className="fa-solid fa-arrow-right ml-1.5"></i>
+            </button>
+          </form>
           
-          <div className="text-center mb-2">
-            <a href="/register" className="text-indigo-600 hover:underline text-xs font-bold">New User? Create an Account</a>
+          <div className="text-center mb-6">
+            <a href="/register" className="text-indigo-600 hover:text-indigo-800 hover:underline text-sm font-bold transition-colors">New User? Create an Account</a>
           </div>
 
-          <div className="relative flex py-2 items-center">
+          <div className="relative flex py-4 items-center">
             <div className="flex-grow border-t border-slate-200"></div>
-            <span className="flex-shrink mx-3 text-[11px] text-slate-400 font-semibold uppercase">Or Hardware Classroom Login</span>
+            <span className="flex-shrink mx-4 text-xs text-slate-400 font-bold uppercase tracking-widest">Or Hardware Classroom Login</span>
             <div className="flex-grow border-t border-slate-200"></div>
           </div>
 
-          <div onClick={handleLogin} className="mt-2 border-2 border-dashed border-emerald-500 bg-emerald-50/70 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-emerald-100 transition">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-lg">
+          <div className="mt-2 border-2 border-dashed border-emerald-400 bg-emerald-50 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-emerald-100 hover:border-emerald-500 transition-all group">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl shadow-md group-hover:scale-110 transition-transform">
                 <i className="fa-solid fa-id-card-clip"></i>
               </div>
               <div>
-                <p className="text-xs font-bold text-emerald-900">Tap NFC Smart Card + R307 Fingerprint</p>
-                <p className="text-[11px] text-emerald-700">Sahakar-BioPass Node #04 • Verified Attendance</p>
+                <p className="text-sm font-bold text-emerald-900 mb-0.5">Tap NFC Smart Card + R307 Fingerprint</p>
+                <p className="text-xs text-emerald-700 font-medium">Sahakar-BioPass Node #04 • Verified Attendance</p>
               </div>
             </div>
-            <span className="text-xs font-bold bg-emerald-600 text-white px-2.5 py-1 rounded-md">Verified ✓</span>
+            <span className="text-xs font-extrabold bg-emerald-600 text-white px-3 py-1.5 rounded-lg shadow-sm">Verified ✓</span>
           </div>
         </div>
       </div>
